@@ -952,8 +952,6 @@ const ImageCrop = forwardRef<ImageCropRef, IImageCropProps>(
       bottom: animatedCropBoxPosition.current.bottom,
       right: animatedCropBoxPosition.current.right,
       left: animatedCropBoxPosition.current.left,
-      borderWidth: 2,
-      borderColor: "#rgba(255, 255, 255, 0.5)",
     };
 
     const ScrolWheelCaptureWrapper = (props: React.PropsWithChildren<any>) => {
@@ -982,32 +980,6 @@ const ImageCrop = forwardRef<ImageCropRef, IImageCropProps>(
           ]}
           {...imageDragAndPinchResponder.panHandlers}
         >
-          {/* INSTRUCTIONS FOR WEB */}
-          {isPointerDevice() && (
-            <View style={styles.instructionsContainer}>
-              <Text style={styles.instructionsText}>
-                Scroll to zoom, drag to move
-              </Text>
-            </View>
-          )}
-
-          {/* OVERFLOW IMAGE */}
-          <Animated.View
-            style={[
-              imageContainerStyle,
-              styles.overflowImageContainer,
-              { opacity: animatedOverflowImageOpacity.current },
-            ]}
-          >
-            <Image
-              style={{
-                width: _imageWidth,
-                height: _imageHeight,
-              }}
-              resizeMode="contain"
-              source={props.source}
-            />
-          </Animated.View>
 
           {/* FOCUS AREA*/}
           <View
