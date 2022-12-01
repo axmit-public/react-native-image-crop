@@ -36,7 +36,7 @@ var DragMode;
     DragMode["IMAGE"] = "image";
     DragMode["SELECTION"] = "selection";
 })(DragMode = exports.DragMode || (exports.DragMode = {}));
-const MIN_SCALE = 0.5;
+const MIN_SCALE = 1;
 const DEFAULT_MAX_SCALE = 3;
 const DEFAULT_CROP_SIZE = 350;
 const MINIMUM_IMAGE_SIZE = 80;
@@ -64,6 +64,7 @@ const ImageCrop = (0, react_1.forwardRef)((props, ref) => {
     const bottomEdgeActivityIndicatorScale = (0, react_1.useRef)(new react_native_1.Animated.Value(0));
     const rightEdgeActivityIndicatorScale = (0, react_1.useRef)(new react_native_1.Animated.Value(0));
     const leftEdgeActivityIndicatorScale = (0, react_1.useRef)(new react_native_1.Animated.Value(0));
+    const borderRadius = (new react_native_1.Animated.Value(30));
     const imageOffsetX = (0, react_1.useRef)(0);
     const imageOffsetY = (0, react_1.useRef)(0);
     const animatedImageOffset = (0, react_1.useRef)(new react_native_1.Animated.ValueXY({ x: 0, y: 0 }));
@@ -738,13 +739,18 @@ const ImageCrop = (0, react_1.forwardRef)((props, ref) => {
             },
         ],
     };
+    if (props.circular) {
+        react_native_1.Animated.timing(borderRadius, {
+          toValue: 150,
+          duration: 1000,
+          useNativeDriver: false,
+        }).start();
+    }
     const cropBoxStyle = {
         top: animatedCropBoxPosition.current.top,
         bottom: animatedCropBoxPosition.current.bottom,
         right: animatedCropBoxPosition.current.right,
         left: animatedCropBoxPosition.current.left,
-        borderWidth: 2,
-        borderColor: "#rgba(255, 255, 255, 0.5)",
     };
     const ScrolWheelCaptureWrapper = (props) => {
         return react_native_1.Platform.OS === "web" ? (react_1.default.createElement("div", { onWheel: onWheel }, props.children)) : (react_1.default.createElement(react_1.default.Fragment, null, props.children));
@@ -765,15 +771,6 @@ const ImageCrop = (0, react_1.forwardRef)((props, ref) => {
             ] }, imageDragAndPinchResponder.panHandlers),
             (0, util_1.isPointerDevice)() && (react_1.default.createElement(react_native_1.View, { style: styles_1.default.instructionsContainer },
                 react_1.default.createElement(react_native_1.Text, { style: styles_1.default.instructionsText }, "Scroll to zoom, drag to move"))),
-            react_1.default.createElement(react_native_1.Animated.View, { style: [
-                    imageContainerStyle,
-                    styles_1.default.overflowImageContainer,
-                    { opacity: animatedOverflowImageOpacity.current },
-                ] },
-                react_1.default.createElement(react_native_1.Image, { style: {
-                        width: _imageWidth,
-                        height: _imageHeight,
-                    }, resizeMode: "contain", source: props.source })),
             react_1.default.createElement(react_native_1.View, { style: [
                     styles_1.default.focusContainer,
                     {
@@ -787,7 +784,7 @@ const ImageCrop = (0, react_1.forwardRef)((props, ref) => {
                             display: "flex",
                             position: "absolute",
                             overflow: "hidden",
-                            borderRadius: props.circular ? 1000 : 0,
+                            borderRadius,
                         },
                         props.cropBoxStyle,
                     ] },
